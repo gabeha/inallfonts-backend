@@ -1,4 +1,5 @@
 env
+*.sqlite3
 
 .mypy_cache
 mypy.ini
