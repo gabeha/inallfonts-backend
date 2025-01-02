@@ -61,11 +61,15 @@ class Response(models.Model):
 class Interaction(models.Model):
     INTERACTION_CHOICES = (
         ('upvote', 'Upvote'),
+        ('downvote', 'Downvote'),
+        ('flag', 'Flag'),
+        ('bookmark', 'Bookmark'),
+        ('report', 'Report'),
         # Add more as needed
     )
 
     response = models.ForeignKey(
-        'challenges.Response', on_delete=models.CASCADE)
+        'challenges.Response', on_delete=models.CASCADE, related_name='interactions')
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     interaction_type = models.CharField(
@@ -74,3 +78,6 @@ class Interaction(models.Model):
 
     class Meta:
         unique_together = ('response', 'user', 'interaction_type')
+
+    def __str__(self):
+        return f"{self.interaction_type} -> {self.response}"

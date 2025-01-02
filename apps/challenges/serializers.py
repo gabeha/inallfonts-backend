@@ -4,6 +4,7 @@ from taggit.serializers import (TagListSerializerField,
 
 from .models import Challenge, Response, Interaction
 from taggit.models import Tag
+from django.db.models import Count
 
 
 class TaggitTagSerializer(serializers.ModelSerializer):
@@ -59,17 +60,51 @@ class ChallengeSerializer(TaggitSerializer, serializers.ModelSerializer):
         return value
 
 
-class ResponseSerializer(TaggitSerializer, serializers.ModelSerializer):
-    tags = TagListSerializerField()
-
-    class Meta:
-        model = Response
-        fields = ['id', 'challenge',
-                  'content', 'tags']
-        read_only_fields = ['user', 'created_at', 'updated_at']
-
-
 class InteractionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interaction
         fields = ['id', 'response', 'user', 'interaction_type', 'created_at']
+
+
+class ResponseSerializer(TaggitSerializer, serializers.ModelSerializer):
+    tags = TagListSerializerField()
+    # This field will show a dictionary or list summarizing interactions
+    interactions_summary = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Response
+        fields = [
+            'id',
+            'challenge',
+            'content',
+            'tags',
+            'interactions_summary',  # <-- new field
+        ]
+
+    def get_interactions_summary(self, obj):
+        """
+        Returns each interaction_type along with its total count.
+        Example output:
+        [
+          {"interaction_type": "upvote", "total_count": 5},
+          {"interaction_type": "downvote", "total_count": 2}
+        ]
+        or you can transform it into a dict if desired.
+        """
+        # 'obj.interactions' assumes we used `related_name='interactions'` in the Interaction model
+        data = (
+            obj.interactions
+            .values("interaction_type")
+            .annotate(total_count=Count("interaction_type"))
+        )
+
+        # data will be a QuerySet of dicts like:
+        # [{'interaction_type': 'upvote', 'total_count': 3}, ...]
+
+        return data
+
+        # ...or transform it into a single dictionary if you prefer:
+        # return {
+        #     item["interaction_type"]: item["total_count"]
+        #     for item in data
+        # }
