@@ -1,3 +1,5 @@
+from rest_framework import serializers
+
 """
 This file was initially created to hold a mixin that would help with
 serializing and deserializing tags for models that use django-taggit's
@@ -7,7 +9,7 @@ mixin is provided below for reference.
 """
 
 
-# class TaggableSerializerMixin:
+# class TaggitSerializer(serializers.Serializer):
 #     """
 #     A mixin that expects:
 #     1. A 'tags' field in the serializer's data (list of strings).

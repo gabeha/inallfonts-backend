@@ -1,6 +1,4 @@
 from rest_framework import serializers
-
-# from .mixins import TaggableSerializerMixin
 from taggit.serializers import (TagListSerializerField,
                                 TaggitSerializer)
 from .models import Challenge, Response, Interaction
