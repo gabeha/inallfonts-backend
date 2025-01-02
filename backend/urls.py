@@ -11,6 +11,7 @@ from apps.challenges.views import ChallengeViewSet, TaggitTagViewSet
 router = DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
 router.register(r'challenges', ChallengeViewSet, basename='challenge')
+router.register(r'responses', ChallengeViewSet, basename='responses')
 router.register(r'tags', TaggitTagViewSet, basename='tag')
 
 urlpatterns = [
