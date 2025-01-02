@@ -14,7 +14,7 @@ class ChallengeSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'user', 'title', 'description',
             'created_at', 'updated_at', 'end_time',
-            'winning_response'
+            'winning_response', 'image'
         ]
 
 

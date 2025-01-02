@@ -1,4 +1,5 @@
 from rest_framework import viewsets, permissions
+from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Challenge, Response, Interaction
 from .serializers import ChallengeSerializer, ResponseSerializer, InteractionSerializer
 from .permissions import IsOwnerOrAdminOrReadOnly  # Example custom permission
@@ -8,6 +9,7 @@ class ChallengeViewSet(viewsets.ModelViewSet):
     queryset = Challenge.objects.all()
     serializer_class = ChallengeSerializer
     permission_classes = [IsOwnerOrAdminOrReadOnly]
+    parser_classes = (MultiPartParser, FormParser)
 
     def perform_create(self, serializer):
         # The user who creates a Challenge is automatically assigned

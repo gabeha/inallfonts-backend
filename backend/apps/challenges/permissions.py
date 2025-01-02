@@ -13,4 +13,4 @@ class IsOwnerOrAdminOrReadOnly(permissions.BasePermission):
             return True
 
         # Write permissions are only allowed to the owner of the snippet.
-        return obj.owner == request.user or request.user.is_admin
+        return obj.user == request.user or request.user.is_admin

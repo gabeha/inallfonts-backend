@@ -3,19 +3,27 @@ from django.conf import settings
 
 
 class Challenge(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL,
-                             on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
     title = models.CharField(max_length=255)
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     end_time = models.DateTimeField(null=True, blank=True)
     winning_response = models.ForeignKey(
-        'Response',
+        'challenges.Response',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
         related_name='won_challenges'
+    )
+
+    image = models.ImageField(
+        upload_to='challenges/',    # subfolder within MEDIA_ROOT
+        null=True,
+        blank=True
     )
 
     def __str__(self):
