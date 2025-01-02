@@ -76,9 +76,11 @@ class ResponseSerializer(TaggitSerializer, serializers.ModelSerializer):
         fields = [
             'id',
             'challenge',
-            'content',
+            'title',
+            'description',
             'tags',
-            'interactions_summary',  # <-- new field
+            'interactions_summary',
+            'image',
         ]
 
     def get_interactions_summary(self, obj):

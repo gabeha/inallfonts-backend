@@ -708,15 +708,26 @@ components:
           readOnly: true
         challenge:
           type: integer
-        content:
+        title:
+          type: string
+          maxLength: 255
+        description:
           type: string
         tags:
           type: array
           items:
             type: string
+        interactions_summary:
+          type: string
+          readOnly: true
+        image:
+          type: string
+          format: binary
+          nullable: true
       required:
       - challenge
-      - content
+      - title
+      - description
       - tags
     TaggitTag:
       type: object

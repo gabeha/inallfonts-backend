@@ -18,7 +18,8 @@ class ChallengeAdmin(admin.ModelAdmin):
 
 @admin.register(Response)
 class ResponseAdmin(admin.ModelAdmin):
-    list_display = ('challenge', 'user', 'content', 'image', 'tags_list')
+    list_display = ('challenge', 'user', 'title',
+                    'description', 'image', 'tags_list')
 
     def tags_list(self, obj):
         return ", ".join(tag.name for tag in obj.tags.all())
