@@ -1,6 +1,9 @@
 from django.db import models
 from django.conf import settings
+from django.forms import ValidationError
 from taggit.managers import TaggableManager
+from datetime import timedelta
+from django.utils import timezone
 
 
 class Challenge(models.Model):
@@ -12,7 +15,8 @@ class Challenge(models.Model):
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    end_time = models.DateTimeField(null=True, blank=True)
+    end_time = models.DateTimeField(
+        default=timezone.now() + timedelta(days=5), null=True, blank=True)
     winning_response = models.ForeignKey(
         'challenges.Response',
         on_delete=models.SET_NULL,
