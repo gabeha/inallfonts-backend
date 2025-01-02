@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from taggit.serializers import (TagListSerializerField,
                                 TaggitSerializer)
+
 from .models import Challenge, Response, Interaction
 from taggit.models import Tag
 
@@ -36,18 +37,6 @@ class ChallengeSerializer(TaggitSerializer, serializers.ModelSerializer):
         ]
         read_only_fields = ['user', 'created_at', 'updated_at']
 
-    def validate(self, attrs):
-        print("VALIDATE called!")
-        return super().validate(attrs)
-
-    def create(self, validated_data):
-        print("CREATE called!")
-        return super().create(validated_data)
-
-    def update(self, instance, validated_data):
-        print("UPDATE called!")
-        return super().update(instance, validated_data)
-
     def validate_winning_response(self, value):
         """
         Ensure the chosen response belongs to this challenge instance.
@@ -56,6 +45,17 @@ class ChallengeSerializer(TaggitSerializer, serializers.ModelSerializer):
         if value and value.challenge_id != self.instance.id:
             raise serializers.ValidationError(
                 "Selected response doesn't belong to this challenge.")
+        return value
+
+    def validate_tags(self, value):
+        """
+        If the tags are a comma-separated string inside a list, split them into a list of individual tags.
+        """
+
+        # Ensure value is a list and has at least one item
+        if isinstance(value, list) and len(value) > 0 and isinstance(value[0], str):
+            # Split the first item in the list by commas and strip whitespace from each tag
+            return [tag.strip() for tag in value[0].split(',')]
         return value
 
 
