@@ -3,6 +3,13 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from .models import Challenge, Response, Interaction
 from .serializers import ChallengeSerializer, ResponseSerializer, InteractionSerializer
 from .permissions import IsOwnerOrAdminOrReadOnly  # Example custom permission
+from taggit.models import Tag
+from .serializers import TaggitTagSerializer
+
+
+class TaggitTagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TaggitTagSerializer
 
 
 class ChallengeViewSet(viewsets.ModelViewSet):

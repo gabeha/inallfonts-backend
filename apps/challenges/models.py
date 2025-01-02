@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from taggit.managers import TaggableManager
 
 
 class Challenge(models.Model):
@@ -26,6 +27,8 @@ class Challenge(models.Model):
         blank=True
     )
 
+    tags = TaggableManager(blank=True)
+
     def __str__(self):
         return self.title
 
@@ -39,24 +42,16 @@ class Response(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    image = models.ImageField(
+        upload_to='responses/',    # subfolder within MEDIA_ROOT
+        null=True,
+        blank=True
+    )
+
+    tags = TaggableManager(blank=True)
+
     def __str__(self):
         return f"Response by {self.user} on {self.challenge}"
-
-
-class Tag(models.Model):
-    name = models.CharField(max_length=50, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
-class ChallengeTag(models.Model):
-    challenge = models.ForeignKey(
-        'challenges.Challenge', on_delete=models.CASCADE)
-    tag = models.ForeignKey('challenges.Tag', on_delete=models.CASCADE)
-
-    class Meta:
-        unique_together = ('challenge', 'tag')
 
 
 class Interaction(models.Model):

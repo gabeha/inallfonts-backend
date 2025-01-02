@@ -1,28 +1,60 @@
 from rest_framework import serializers
-from .models import Challenge, Response, Tag, ChallengeTag, Interaction
+
+from .mixins import TaggableSerializerMixin
+from .models import Challenge, Response, Interaction
+from taggit.models import Tag
 
 
-class TagSerializer(serializers.ModelSerializer):
+class TaggitTagSerializer(serializers.ModelSerializer):
     class Meta:
         model = Tag
         fields = ['id', 'name']
 
 
-class ChallengeSerializer(serializers.ModelSerializer):
+class TagListSerializerField(serializers.ListField):
+    """
+    Custom field that reads/writes a list of tag strings.
+    """
+    child = serializers.CharField()
+
+    def to_representation(self, value):
+        # `value` is the TaggableManager
+        return [tag.name for tag in value.all()]
+
+    def to_internal_value(self, data):
+        # `data` is a list of strings from the incoming JSON
+        if not isinstance(data, list):
+            raise serializers.ValidationError('Expected a list of strings')
+        return data
+
+
+class ChallengeSerializer(TaggableSerializerMixin, serializers.ModelSerializer):
+    tags = TagListSerializerField()
+
     class Meta:
         model = Challenge
         fields = [
-            'id', 'user', 'title', 'description',
-            'created_at', 'updated_at', 'end_time',
-            'winning_response', 'image'
+            'id',
+            'user',
+            'title',
+            'description',
+            'created_at',
+            'updated_at',
+            'end_time',
+            'image',
+            'tags',
         ]
+        read_only_fields = ['user', 'created_at', 'updated_at']
 
 
-class ResponseSerializer(serializers.ModelSerializer):
+class ResponseSerializer(TaggableSerializerMixin, serializers.ModelSerializer):
+    tags = TagListSerializerField()
+
     class Meta:
         model = Response
-        fields = ['id', 'challenge', 'user',
-                  'content', 'created_at', 'updated_at']
+        fields = ['id', 'challenge',
+                  'content', 'tags']
+        read_only_fields = ['user', 'created_at', 'updated_at']
 
 
 class InteractionSerializer(serializers.ModelSerializer):

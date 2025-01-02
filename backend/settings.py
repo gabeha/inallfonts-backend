@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "rest_framework",
     "apps.users",
-    "apps.challenges"
+    "apps.challenges",
+    "taggit"
 ]
 
 REST_FRAMEWORK = {
