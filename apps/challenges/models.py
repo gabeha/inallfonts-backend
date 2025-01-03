@@ -18,7 +18,7 @@ class Challenge(models.Model):
     end_time = models.DateTimeField(
         default=timezone.now() + timedelta(days=5), null=True, blank=True)
     winning_response = models.ForeignKey(
-        'challenges.Response',
+        'challenges.ChallengeResponse',
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
@@ -37,7 +37,7 @@ class Challenge(models.Model):
         return self.title
 
 
-class Response(models.Model):
+class ChallengeResponse(models.Model):
     challenge = models.ForeignKey(
         'challenges.Challenge', on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
@@ -48,7 +48,7 @@ class Response(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     image = models.ImageField(
-        upload_to='responses/',    # subfolder within MEDIA_ROOT
+        upload_to='challenge_responses/',    # subfolder within MEDIA_ROOT
         null=True,
         blank=True
     )
@@ -70,12 +70,13 @@ class Interaction(models.Model):
     )
 
     response = models.ForeignKey(
-        'challenges.Response', on_delete=models.CASCADE, related_name='interactions')
+        'challenges.ChallengeResponse', on_delete=models.CASCADE, related_name='interactions')
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)
     interaction_type = models.CharField(
         max_length=50, choices=INTERACTION_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
+    celery_task_id = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         unique_together = ('response', 'user', 'interaction_type')

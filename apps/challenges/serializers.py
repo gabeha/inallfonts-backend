@@ -2,7 +2,7 @@ from rest_framework import serializers
 from taggit.serializers import (TagListSerializerField,
                                 TaggitSerializer)
 
-from .models import Challenge, Response, Interaction
+from .models import Challenge, ChallengeResponse, Interaction
 from taggit.models import Tag
 from django.db.models import Count
 
@@ -17,7 +17,7 @@ class ChallengeSerializer(TaggitSerializer, serializers.ModelSerializer):
     tags = TagListSerializerField()
 
     winning_response = serializers.PrimaryKeyRelatedField(
-        queryset=Response.objects.all(),
+        queryset=ChallengeResponse.objects.all(),
         allow_null=True,  # in case you allow unsetting it
         required=False,
     )
@@ -63,16 +63,17 @@ class ChallengeSerializer(TaggitSerializer, serializers.ModelSerializer):
 class InteractionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Interaction
-        fields = ['id', 'response', 'user', 'interaction_type', 'created_at']
+        fields = ['id', 'response', 'user',
+                  'interaction_type', 'created_at', 'celery_task_id']
 
 
-class ResponseSerializer(TaggitSerializer, serializers.ModelSerializer):
+class ChallengeResponseSerializer(TaggitSerializer, serializers.ModelSerializer):
     tags = TagListSerializerField()
     # This field will show a dictionary or list summarizing interactions
     interactions_summary = serializers.SerializerMethodField()
 
     class Meta:
-        model = Response
+        model = ChallengeResponse
         fields = [
             'id',
             'challenge',

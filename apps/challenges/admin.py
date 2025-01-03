@@ -1,4 +1,4 @@
-from .models import Challenge, Response, Interaction
+from .models import Challenge, ChallengeResponse, Interaction
 
 from django.contrib import admin
 
@@ -16,7 +16,7 @@ class ChallengeAdmin(admin.ModelAdmin):
     tags_list.short_description = 'Tags'
 
 
-@admin.register(Response)
+@admin.register(ChallengeResponse)
 class ResponseAdmin(admin.ModelAdmin):
     list_display = ('challenge', 'user', 'title',
                     'description', 'image', 'tags_list')

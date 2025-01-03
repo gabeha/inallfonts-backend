@@ -6,12 +6,13 @@ from rest_framework.routers import DefaultRouter
 
 # Import your viewsets
 from apps.users.views import UserViewSet
-from apps.challenges.views import ChallengeViewSet, ResponseViewSet, TaggitTagViewSet
+from apps.challenges.views import ChallengeViewSet, InteractionViewSet, ChallengeResponseViewSet, TaggitTagViewSet
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
 router.register(r'challenges', ChallengeViewSet, basename='challenge')
-router.register(r'responses', ResponseViewSet, basename='responses')
+router.register(r'responses', ChallengeResponseViewSet, basename='responses')
+router.register(r'interactions', InteractionViewSet, basename='interactions')
 router.register(r'tags', TaggitTagViewSet, basename='tag')
 
 urlpatterns = [

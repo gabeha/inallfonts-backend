@@ -22,6 +22,22 @@ MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
 
+# Celery Broker Configuration (using RabbitMQ)
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+
+# Celery Result Backend Configuration (using Redis)
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+# Optional: Configure task serialization and result serialization
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TIMEZONE = 'UTC'
+
+# Optional: Enable broker connection retry on startup for future Celery versions
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
