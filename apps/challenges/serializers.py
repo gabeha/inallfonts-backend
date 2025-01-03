@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from taggit.serializers import (TagListSerializerField, TaggitSerializer)
 from .models import Challenge, ChallengeResponse, Interaction
-from taggit.models import Tag
+from taggit.models import Tag, TaggedItem
 from django.db.models import Count
 
 
@@ -9,6 +9,18 @@ class TaggitTagSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Tag
         fields = ['url', 'id', 'name']
+
+
+class TaggitTaggedItemSerializer(serializers.HyperlinkedModelSerializer):
+    # TODO: Hyperlink the object_id and content_type_id fields
+    tag = serializers.HyperlinkedRelatedField(
+        view_name='tag-detail',
+        read_only=True
+    )
+
+    class Meta:
+        model = TaggedItem
+        fields = ['url', 'id', 'object_id', 'content_type_id', 'tag']
 
 
 class ChallengeSerializer(TaggitSerializer, serializers.HyperlinkedModelSerializer):
@@ -39,15 +51,6 @@ class ChallengeSerializer(TaggitSerializer, serializers.HyperlinkedModelSerializ
 
 
 class InteractionSerializer(serializers.HyperlinkedModelSerializer):
-    # response = serializers.HyperlinkedRelatedField(
-    #     view_name='challengeresponse-detail',
-    #     read_only=True
-    # )
-    # user = serializers.HyperlinkedRelatedField(
-    #     view_name='user-detail',
-    #     read_only=True
-    # )
-
     class Meta:
         model = Interaction
         fields = ['url', 'id', 'response', 'user',

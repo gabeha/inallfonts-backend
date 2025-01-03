@@ -3,9 +3,9 @@ from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.response import Response
 from .models import Challenge, ChallengeResponse, Interaction
-from .serializers import ChallengeSerializer, ChallengeResponseSerializer, InteractionSerializer
+from .serializers import ChallengeSerializer, ChallengeResponseSerializer, InteractionSerializer, TaggitTaggedItemSerializer
 from .permissions import IsOwnerOrAdminOrReadOnly  # Example custom permission
-from taggit.models import Tag
+from taggit.models import Tag, TaggedItem
 from .serializers import TaggitTagSerializer
 
 from .tasks import send_interaction_notification
@@ -14,6 +14,11 @@ from .tasks import send_interaction_notification
 class TaggitTagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TaggitTagSerializer
+
+
+class TaggitTaggedItemViewSet(viewsets.ModelViewSet):
+    queryset = TaggedItem.objects.all()
+    serializer_class = TaggitTaggedItemSerializer
 
 
 class ChallengeViewSet(viewsets.ModelViewSet):
@@ -30,7 +35,7 @@ class ChallengeViewSet(viewsets.ModelViewSet):
 class ChallengeResponseViewSet(viewsets.ModelViewSet):
     queryset = ChallengeResponse.objects.all()
     serializer_class = ChallengeResponseSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [IsOwnerOrAdminOrReadOnly]
     parser_classes = (MultiPartParser, FormParser)
 
     def perform_create(self, serializer):
@@ -40,7 +45,7 @@ class ChallengeResponseViewSet(viewsets.ModelViewSet):
 class InteractionViewSet(viewsets.ModelViewSet):
     queryset = Interaction.objects.all()
     serializer_class = InteractionSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsOwnerOrAdminOrReadOnly]
 
     def perform_create(self, serializer):
         # user is the one who does the interaction
