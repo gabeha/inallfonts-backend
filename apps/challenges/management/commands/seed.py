@@ -60,7 +60,7 @@ class Command(BaseCommand):
         # Create Challenges
         self.stdout.write('Creating challenges...')
         challenges = []
-        for _ in range(20):
+        for _ in range(2):
             challenge = Challenge.objects.create(
                 user=random.choice(users),
                 title=fake.sentence(nb_words=6),
@@ -79,7 +79,7 @@ class Command(BaseCommand):
         self.stdout.write('Creating challenge responses...')
         responses = []
         for challenge in challenges:
-            num_responses = random.randint(1, 5)
+            num_responses = random.randint(1, 2)
             for _ in range(num_responses):
                 response = ChallengeResponse.objects.create(
                     challenge=challenge,
