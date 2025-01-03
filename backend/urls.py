@@ -11,8 +11,10 @@ from apps.challenges.views import ChallengeViewSet, InteractionViewSet, Challeng
 router = DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
 router.register(r'challenges', ChallengeViewSet, basename='challenge')
-router.register(r'responses', ChallengeResponseViewSet, basename='responses')
-router.register(r'interactions', InteractionViewSet, basename='interactions')
+router.register(r'challenge-responses',
+                ChallengeResponseViewSet, basename='challengeresponse')
+router.register(r'interactions', InteractionViewSet,
+                basename='interaction')
 router.register(r'tags', TaggitTagViewSet, basename='tag')
 
 urlpatterns = [
