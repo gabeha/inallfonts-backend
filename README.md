@@ -15,7 +15,7 @@ A brief description of the project and its purpose.
 
 ## Prerequisites
 
-- **Python 3.7+** (Python 3.13 is shown in the traceback, but anything 3.7+ should generally work with Django 5)
+- **Python 3.7+** (Python 3.13 is recommended, but anything 3.7+ should generally work with Django 5)
 - **Virtual Environment** (recommended)
 - **Git** (to clone the repository)
 
@@ -70,7 +70,7 @@ _(On some systems, you may need libraries for Pillow, e.g., libjpeg. Most modern
    ```
 
 7. **Navigate to** `http://127.0.0.1:8000/` in your browser.
-   - If you have a DRF-based API, you can typically find the browsable API at `http://127.0.0.1:8000/api/`.
+   - For the DRF-based API, you can find the browsable API at `http://127.0.0.1:8000/api/`.
 
 ---
 
